@@ -19,8 +19,12 @@ function validateR($rVal) {
   return is_numeric($rVal);
 }
 
-function validateForm($xVal, $yVal, $rVal) {
-  return validateX($xVal) && validateY($yVal) && validateR($rVal);
+function validateTimezone($timezoneOffset) {
+  return is_numeric($timezoneOffset);
+}
+
+function validateForm($xVal, $yVal, $rVal, $timezoneOffset) {
+  return validateX($xVal) && validateY($yVal) && validateR($rVal) && validateTimezone($timezoneOffset);
 }
 
 function checkTriangle($xVal, $yVal, $rVal) {
@@ -43,12 +47,20 @@ function checkHit($xVal, $yVal, $rVal) {
     checkCircle($xVal, $yVal, $rVal);
 }
 
-$xVal= $_GET['xval'];
-$yVal= $_GET['yval'];
-$rVal= $_GET['rval'];
+$xVal= str_replace(',','.',$_GET['xval']);
+$yVal= str_replace(',','.',$_GET['yval']);
+$rVal= str_replace(',','.',$_GET['rval']);
 $timezoneOffset = $_GET['timezone'];
 
-$isValid = validateForm($xVal, $yVal, $rVal);
+$isValid = validateForm($xVal, $yVal, $rVal, $timezoneOffset);
+if (!$isValid){
+    echo  '{' .
+           "\"isValid\":false," .
+           "\"message\":\"Ошибка валидации!\"" .
+           "}";
+    exit;
+}
+
 $converted_isValid = $isValid ? 'true' : 'false';
 $isHit = $isValid ? checkHit($xVal, $yVal, $rVal) : False;
 $converted_isHit= $isHit ? 'true' : 'false';

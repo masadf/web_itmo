@@ -4,7 +4,7 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: Montserrat;
+    font-family: Montserrat, sans-serif;
 }
 
 .wrapper {
@@ -13,8 +13,8 @@
     grid-template-rows: auto 1fr 1fr;
     width: 100vw;
     min-height: 100vh;
-    padding: 1rem;
-    gap: 1rem;
+    padding: 2rem;
+    gap: 2rem;
 }
 
 .sector {
@@ -155,13 +155,24 @@
 }
 
 .error {
-    padding-top: 1rem;
+    padding: 1rem 0;
     color: red;
-    height: 2rem;
+    height: 3rem;
     font-weight: 700;
     justify-self: center;
 }
 
 .error-text {
     display: none;
+}
+
+input{
+    cursor: pointer;
+}
+
+input[type=text] {
+    padding: 5% 3%;
+    outline: none;
+    border: 0.1rem solid #53ffd1;
+    cursor: text;
 }

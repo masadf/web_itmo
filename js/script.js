@@ -78,7 +78,7 @@ $(() => {
                     newRow += '</tr>';
                     $('table').append(newRow);
                 } else {
-                    error.text("Ошибка валидации!");
+                    error.text(data.message);
                     showError();
                 }
             }
