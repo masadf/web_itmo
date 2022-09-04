@@ -12,7 +12,7 @@ function validateY($yVal) {
   if (!is_numeric($numY))
     return false;
 
-  return is_numeric($numY) && $numY >= $Y_MIN && $numY <= $Y_MAX;
+  return $numY >= $Y_MIN && $numY <= $Y_MAX;
 }
 
 function validateR($rVal) {
@@ -61,15 +61,14 @@ if (!$isValid){
     exit;
 }
 
-$converted_isValid = $isValid ? 'true' : 'false';
-$isHit = $isValid ? checkHit($xVal, $yVal, $rVal) : False;
+$isHit = checkHit($xVal, $yVal, $rVal);
 $converted_isHit= $isHit ? 'true' : 'false';
 
 $currentTime = date('H:i:s', time()-$timezoneOffset*60);
 $executionTime = round(microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'], 7);
 
 $jsonData = '{' .
-  "\"isValid\":$converted_isValid," .
+  "\"isValid\":true," .
   "\"xVal\":\"$xVal\"," .
   "\"yVal\":\"$yVal\"," .
   "\"rVal\":\"$rVal\"," .
