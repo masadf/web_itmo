@@ -1,87 +1,80 @@
-$(() => {
-    let error = $('.error-text');
+import {validate} from "./validation.js";
 
-    function validate() {
-        return validateX() & validateY() & validateR();
-    }
-
-    function validateX() {
-        if ($('input[name=xval]').is(':checked')) {
-            return true;
+$('#values-form').submit((e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    $.ajax({
+        url: 'php/main.php',
+        method: 'GET',
+        data: $('#values-form').serialize() + '&timezone=' + new Date().getTimezoneOffset(),
+        dataType: "json",
+        beforeSend: () => {
+            $('button[type=submit]').attr('disabled', 'disabled');
+        },
+        success: (data) => {
+            $('button[type=submit]').attr('disabled', false);
+            let newRow;
+            newRow = '<tr>';
+            newRow += '<td>' + data.xVal + '</td>';
+            newRow += '<td>' + data.yVal + '</td>';
+            newRow += '<td>' + data.rVal + '</td>';
+            newRow += '<td>' + data.currentTime + '</td>';
+            newRow += '<td>' + data.executionTime + '</td>';
+            newRow += '<td>' + data.isHit + '</td>';
+            newRow += '</tr>';
+            $('table').append(newRow);
         }
-        showError();
-        error.text('Ошибка валидации X!')
-        return false;
-    }
+    });
+})
 
-    function validateY() {
-        const MAX_Y = 5;
-        const MIN_Y = -5;
-
-        let valY = $('input[name=yval]').val().replace(',', '.');
-
-        if (isNum(valY) && valY >= MIN_Y && valY <= MAX_Y) {
-            return true;
+$('input[name=xval]').on('change', (e) => {
+    let value = e.currentTarget.defaultValue;
+    $('input[name=xval]').map((index, item) => {
+        if (item.defaultValue !== value) {
+            item.checked = false;
         }
-        showError();
-        error.text('Ошибка валидации Y!')
-        return false;
-    }
-
-    function validateR() {
-        if ($('input[name=rval]').is(':checked')) {
-            return true;
-        }
-        showError();
-        error.text('Ошибка валидации R!')
-        return false;
-    }
-
-    function isNum(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-
-    function showError() {
-        error.css({
-            display: 'block'
-        })
-    }
-
-    function hideError() {
-        error.css({
-            display: 'none'
-        })
-    }
-
-    $('#values-form').submit((e) => {
-        e.preventDefault();
-        hideError();
-        if (!validate()) return;
-        $.ajax({
-            url: 'php/main.php',
-            method: 'GET',
-            data: $('#values-form').serialize() + '&timezone=' + new Date().getTimezoneOffset(),
-            dataType: "json",
-            beforeSend: () => {
-                $('button[type=submit]').attr('disabled', 'disabled');
-            },
-            success: (data) => {
-                $('button[type=submit]').attr('disabled', false);
-                if (data.isValid) {
-                    newRow = '<tr>';
-                    newRow += '<td>' + data.xVal + '</td>';
-                    newRow += '<td>' + data.yVal + '</td>';
-                    newRow += '<td>' + data.rVal + '</td>';
-                    newRow += '<td>' + data.currentTime + '</td>';
-                    newRow += '<td>' + data.executionTime + '</td>';
-                    newRow += '<td>' + data.isHit + '</td>';
-                    newRow += '</tr>';
-                    $('table').append(newRow);
-                } else {
-                    error.text(data.message);
-                    showError();
-                }
-            }
-        });
     })
+})
+
+$(window).on('load', (e) => {
+    $.ajax({
+        url: 'php/store.php',
+        method: 'GET',
+        dataType: "json",
+        success: (data) => {
+            data.forEach((value, index) => {
+                let newRow;
+                newRow = '<tr>';
+                newRow += '<td>' + value.xVal + '</td>';
+                newRow += '<td>' + value.yVal + '</td>';
+                newRow += '<td>' + value.rVal + '</td>';
+                newRow += '<td>' + value.currentTime + '</td>';
+                newRow += '<td>' + value.executionTime + '</td>';
+                newRow += '<td>' + value.isHit + '</td>';
+                newRow += '</tr>';
+                $('table').append(newRow);
+            })
+        }
+    });
+});
+
+$('#remove_button').on('click', (e) => {
+    $.ajax({
+        url: 'php/restore.php',
+        method: 'GET',
+        dataType: "json",
+        success: (data) => {
+            $('table').empty();
+            let newRow;
+            newRow = '<tr>';
+            newRow += '<th>' + 'X' + '</th>';
+            newRow += '<th>' + 'Y' + '</th>';
+            newRow += '<th>' + 'R' + '</th>';
+            newRow += '<th>' + 'Время попытки' + '</th>';
+            newRow += '<th>' + 'Длительность' + '</th>';
+            newRow += '<th>' + 'Попадание' + '</th>';
+            newRow += '</tr>';
+            $('table').append(newRow);
+        }
+    });
 })

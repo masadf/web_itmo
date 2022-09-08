@@ -61,6 +61,7 @@
 }
 
 .table-block .container {
+    position: relative;
     height: 100%;
     display: grid;
     grid-template-rows: auto 1fr;
@@ -149,15 +150,18 @@
     font-size: .8rem;
 }
 
+button {
+    outline: none;
+    cursor: pointer;
+    border: 0;
+}
+
 .buttons {
     display: grid;
     gap: .5rem;
 }
 
 .buttons button {
-    outline: none;
-    cursor: pointer;
-    border: 0;
     background: #53ffd1;
     padding: .5rem;
     font-weight: 700;
@@ -194,4 +198,14 @@ input[type=text] {
 
 input[type=text]:focus {
     border-color: #00eaff;
+}
+
+.remove_button button {
+    position: absolute;
+    font-weight: 900;
+    font-size: 1.05rem;
+    top: -0.2rem;
+    right: -0.2rem;
+    background-color: red;
+    padding: .5rem .8rem;
 }
