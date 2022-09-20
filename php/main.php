@@ -11,9 +11,9 @@ $timezoneOffset = getQueryParam("timezone");
 
 validateForm($xVal, $yVal, $rVal, $timezoneOffset);
 
-$xVal = (float)$xVal;
-$yVal = (float)$yVal;
-$rVal = (float)$rVal;
+$xVal = (double)$xVal;
+$yVal = (double)$yVal;
+$rVal = (double)$rVal;
 $isHit = checkHit($xVal, $yVal, $rVal) ? "true" : "false";
 $currentTime = date("H:i:s", time() - $timezoneOffset * 60);
 $executionTime = round(microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"], 7);

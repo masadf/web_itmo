@@ -1,4 +1,4 @@
-import {hideError, showError} from "./front-view.js";
+import { hideError, showError } from "./front-view.js";
 
 export function validate() {
     hideError();
